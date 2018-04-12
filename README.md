@@ -27,6 +27,38 @@ The `load` method of Sec attempts to load the contents of a secret, based on a g
 3. Load the content of the environment variable `{name}` (`name` is uppercased here)
 4. Return the value of the `fallback` argument if provided, or `None`
 
+## Example
+
+### Loading a secret from `/run/secrets`
+
+Let's assume that the file `/run/secrets/database-password` exists and its content is `123`.
+
+```python
+import sec
+
+sec.load('database-password') # This will return `123`
+```
+
+### Loading a secret based on an environment variable hint
+
+Let's assume that the environment variable `AWS_KEY_FILE` exists, its content is `/etc/app/my_aws_key` and that the content of `/etc/app/my_aws_key` is  `wow`.
+
+```python
+import sec
+
+sec.load('aws_key') # This will return `wow`
+```
+
+### Loading a secret based on an environment variable
+
+Let's assume that the environment variable `DATABASE_URL` exists and its content is `sqlite:///mnt/db.sqlite`.
+
+```python
+import sec
+
+sec.load('database_url') # This will return `sqlite:///mnt/db.sqlite`
+```
+
 ## License
 
 Sec is [`MIT Licensed`](LICENSE).

@@ -27,7 +27,7 @@ The `load` method of Sec attempts to load the contents of a secret, based on a g
 3. Load the content of the environment variable `{name}` (`name` is uppercased here)
 4. Return the value of the `fallback` argument if provided, or `None`
 
-## Example
+## Examples
 
 ### Loading a secret from `/run/secrets`
 

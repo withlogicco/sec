@@ -68,7 +68,7 @@ def test_load_from_environment_variable():
     """
     secret_name = "database_url"
     uppercase_secret_name = secret_name.upper()
-    secret = 'postgres://USER:PASSWORD@HOST:PORT/NAME'
+    secret = "postgres://USER:PASSWORD@HOST:PORT/NAME"
 
     assert sec._load_from_environment_variable(secret_name) is None
 
@@ -85,10 +85,10 @@ def test_load():
       3. via `_load_from_environment_variable`
       4. None or the provided fallback
     """
-    with patch('sec._load_from_run_secrets') as run_secrets_mock:
-        with patch('sec._load_from_environment_hint') as env_hint_mock:
-            with patch('sec._load_from_environment_variable') as env_var_mock:
-                secret_name = 'whoa'
+    with patch("sec._load_from_run_secrets") as run_secrets_mock:
+        with patch("sec._load_from_environment_hint") as env_hint_mock:
+            with patch("sec._load_from_environment_variable") as env_var_mock:
+                secret_name = "whoa"
 
                 # Test case 1
                 assert sec.load(secret_name) == run_secrets_mock.return_value
@@ -104,4 +104,4 @@ def test_load():
                 # Test case 4
                 env_var_mock.return_value = None
                 assert sec.load(secret_name) == None
-                assert sec.load(secret_name, 'fallback') == 'fallback'
+                assert sec.load(secret_name, "fallback") == "fallback"

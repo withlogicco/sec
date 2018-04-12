@@ -13,3 +13,4 @@ name = "pypi"
 
 white = "*"
 black = "*"
+pytest = "*"

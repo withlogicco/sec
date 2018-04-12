@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="sec",
-    version="0.2.0",
+    version="0.2.1",
     description=(
         "Simple library for working with secrets in both files and "
         "environment variables."
@@ -15,7 +15,7 @@ setup(
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
-        "Topic :: Software Development :: Secrets",
+        "Topic :: Software Development",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",

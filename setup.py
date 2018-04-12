@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="sec",
-    version="0.2.1",
+    version="0.2.2",
     description=(
         "Simple library for working with secrets in both files and "
         "environment variables."
@@ -20,5 +20,5 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
     ],
-    keywords='secrets development',
+    keywords="secrets development",
 )

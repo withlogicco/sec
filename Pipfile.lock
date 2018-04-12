@@ -1,0 +1,60 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "124e5d50565e684ad615f9f8418e62a2f2236f6ef51c84c0dd2c85e82ed80cbd"
+        },
+        "host-environment-markers": {
+            "implementation_name": "cpython",
+            "implementation_version": "3.6.4",
+            "os_name": "posix",
+            "platform_machine": "x86_64",
+            "platform_python_implementation": "CPython",
+            "platform_release": "4.4.0-116-generic",
+            "platform_system": "Linux",
+            "platform_version": "#140-Ubuntu SMP Mon Feb 12 21:23:04 UTC 2018",
+            "python_full_version": "3.6.4",
+            "python_version": "3.6",
+            "sys_platform": "linux"
+        },
+        "pipfile-spec": 6,
+        "requires": {},
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.python.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {},
+    "develop": {
+        "attrs": {
+            "hashes": [
+                "sha256:a17a9573a6f475c99b551c0e0a812707ddda1ec9653bed04c13841404ed6f450",
+                "sha256:1c7960ccfd6a005cd9f7ba884e6316b5e430a3f1a6c37c5f87d8b43f83b54ec9"
+            ],
+            "version": "==17.4.0"
+        },
+        "black": {
+            "hashes": [
+                "sha256:375582bcb6b8345d10475a9298b1357e8002996c3b31df4eba42f5b541e60f96",
+                "sha256:e9823469b247ed5e186c21f7e94c02aafd8d0905729a5b3748b555bcc2637e5b"
+            ],
+            "version": "==18.4a1"
+        },
+        "click": {
+            "hashes": [
+                "sha256:29f99fc6125fbc931b758dc053b3114e55c77a6e4c6c3a2674a2dc986016381d",
+                "sha256:f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b"
+            ],
+            "version": "==6.7"
+        },
+        "white": {
+            "hashes": [
+                "sha256:bca98066256cfff6fb85ec36b95cc5913c888c170a8407c340786972b06c6f8f",
+                "sha256:45e2c7f54de1facc60bf0a726b480cdc43422aad57c3a0bc5ba54cb536696683"
+            ],
+            "version": "==0.1.2"
+        }
+    }
+}

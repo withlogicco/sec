@@ -22,8 +22,8 @@ jobs:
         poetry config virtualenvs.create false
         poetry install
     - name: Check formatting
-      run: black --check nbg/
+      run: black --check ./
     - name: Check typings
       run: mypy *.py
     - name: Test with pytest
-      run: pytest nbg/
+      run: pytest ./

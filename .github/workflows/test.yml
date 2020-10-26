@@ -1,10 +1,6 @@
 name: Tests
 
-on:
-  push:
-    branches:
-      - $default-branch
-  pull_request:
+on: push
 
 jobs:
   test:

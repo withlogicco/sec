@@ -27,5 +27,7 @@ jobs:
         poetry install
     - name: Check formatting
       run: black --check nbg/
+    - name: Check typings
+      run: mypy *.py
     - name: Test with pytest
       run: pytest nbg/

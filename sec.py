@@ -2,6 +2,11 @@ from typing import Optional
 import os
 
 
+def _sanitize_environment_variable_name(name: str) -> str:
+    uppercase_name = name.upper()
+    sanitized_name = uppercase_name.replace("/", "_")
+    return sanitized_name
+
 def _load_secret_from_path(path: str) -> Optional[str]:
     if not os.path.exists(path):
         return None
@@ -23,8 +28,8 @@ def _load_from_environment_hint(name: str) -> Optional[str]:
 
 
 def _load_from_environment_variable(name: str) -> Optional[str]:
-    uppercase_name = name.upper()
-    return os.getenv(uppercase_name)
+    sanitized_name = _sanitize_environment_variable_name(name)
+    return os.getenv(sanitized_name)
 
 
 def load(name: str, fallback: str = None) -> Optional[str]:

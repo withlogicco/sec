@@ -63,17 +63,18 @@ def test_load_from_environment_hint():
 def test_load_from_environment_variable():
     """
     Make sure that the `_load_from_environment_variable` function returns the
-    contents of the corresponding environment variable, after uppercasing the
+    contents of the corresponding environment variable, after sanitising the
     name of the secret.
     """
-    secret_name = "database_url"
-    uppercase_secret_name = secret_name.upper()
+    environment_variable_name = "DATABASE_URL"
     secret = "postgres://USER:PASSWORD@HOST:PORT/NAME"
 
-    assert sec._load_from_environment_variable(secret_name) is None
+    assert sec._load_from_environment_variable(environment_variable_name) is None
 
-    os.environ[uppercase_secret_name] = secret
-    assert sec._load_from_environment_variable(secret_name) == secret
+    os.environ[environment_variable_name] = secret
+    assert sec._load_from_environment_variable("DATABASE_URL") == secret
+    assert sec._load_from_environment_variable("database_url") == secret
+    assert sec._load_from_environment_variable("database/url") == secret
 
 
 def test_load():

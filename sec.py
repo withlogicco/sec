@@ -1,7 +1,14 @@
+from typing import Optional
 import os
 
 
-def _load_secret_from_path(path: str) -> str:
+def _sanitize_environment_variable_name(name: str) -> str:
+    uppercase_name = name.upper()
+    sanitized_name = uppercase_name.replace("/", "_")
+    return sanitized_name
+
+
+def _load_secret_from_path(path: str) -> Optional[str]:
     if not os.path.exists(path):
         return None
 
@@ -9,24 +16,24 @@ def _load_secret_from_path(path: str) -> str:
         return secret_file.read().strip()
 
 
-def _load_from_run_secrets(name: str) -> str:
+def _load_from_run_secrets(name: str) -> Optional[str]:
     lowercase_name = name.lower()
     path = f"/run/secrets/{lowercase_name}"
     return _load_secret_from_path(path)
 
 
-def _load_from_environment_hint(name: str) -> str:
+def _load_from_environment_hint(name: str) -> Optional[str]:
     uppercase_name = name.upper()
     path = os.getenv(f"{uppercase_name}_FILE")
     return _load_secret_from_path(path) if path else None
 
 
-def _load_from_environment_variable(name: str) -> str:
-    uppercase_name = name.upper()
-    return os.getenv(uppercase_name)
+def _load_from_environment_variable(name: str) -> Optional[str]:
+    sanitized_name = _sanitize_environment_variable_name(name)
+    return os.getenv(sanitized_name)
 
 
-def load(name: str, fallback: str = None) -> str:
+def load(name: str, fallback: str = None) -> Optional[str]:
     """
     Searches for and returns the first secret that matches the following
     criteria in the order described:

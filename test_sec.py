@@ -69,9 +69,7 @@ def test_load_from_environment_variable():
     environment_variable_name = "DATABASE_URL"
     secret = "postgres://USER:PASSWORD@HOST:PORT/NAME"
 
-    assert sec._load_from_environment_variable(
-        environment_variable_name
-    ) is None
+    assert sec._load_from_environment_variable(environment_variable_name) is None
 
     os.environ[environment_variable_name] = secret
     assert sec._load_from_environment_variable("DATABASE_URL") == secret

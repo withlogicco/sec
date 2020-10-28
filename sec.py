@@ -7,6 +7,7 @@ def _sanitize_environment_variable_name(name: str) -> str:
     sanitized_name = uppercase_name.replace("/", "_")
     return sanitized_name
 
+
 def _load_secret_from_path(path: str) -> Optional[str]:
     if not os.path.exists(path):
         return None

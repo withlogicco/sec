@@ -36,7 +36,7 @@ uv run pytest
 
 ## Requirements
 
-Sec requires Python 3.6 (or greater) to work.
+Sec requires Python 3.8 (or greater) to work.
 
 ## API Documentation
 

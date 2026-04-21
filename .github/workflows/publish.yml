@@ -10,16 +10,12 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v5
-      - name: Build distributions
-        run: uv build
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_TOKEN }}
+          python-version: "3.14"
+      - uses: astral-sh/setup-uv@v8.1.0
+      - run: uv build
+      - run: uv publish
+        env:
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}

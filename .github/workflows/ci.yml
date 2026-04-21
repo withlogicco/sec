@@ -9,19 +9,14 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v5
-      - name: Install dependencies
-        run: uv sync --group dev
-      - name: Run Ruff
-        run: |
-          uv run ruff check .
-          uv run ruff format --check .
+          python-version: "3.14"
+      - uses: astral-sh/setup-uv@v8.1.0
+      - run: uv sync --group dev
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
 
   test:
     runs-on: ubuntu-latest
@@ -29,16 +24,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12", "3.13" ]
+        python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14" ]
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v5
-      - name: Install dependencies
-        run: uv sync --group dev
-      - name: Run tests
-        run: uv run pytest
+      - uses: astral-sh/setup-uv@v8.1.0
+      - run: uv sync --group dev
+      - run: uv run pytest

@@ -140,9 +140,9 @@ def load(name: str, fallback: str = None) -> Optional[str]:
 
       1. The contents of `/run/secrets/{lowercase_secret_name}`
       2. The contents of the path in the env var `{uppercase_secret_name}_FILE`
-            3. The contents of the env var `{uppercase_secret_name}`
-            4. The contents of `{pwd}/.env`
-            5. The provided fallback (if any)
+      3. The contents of the env var `{uppercase_secret_name}`
+      4. The contents of `{pwd}/.env`
+      5. The provided fallback (if any)
     """
     secret = (
         _load_from_run_secrets(name)

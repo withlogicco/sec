@@ -1,6 +1,6 @@
-from unittest.mock import patch
 import os
 import tempfile
+from unittest.mock import patch
 
 import sec
 
@@ -17,7 +17,7 @@ def test_load_secret_from_path():
         license = license_file.read().strip()
 
     assert sec._load_secret_from_path(license_path) == license
-    assert sec._load_secret_from_path("/i/do/not/exist") == None
+    assert sec._load_secret_from_path("/i/do/not/exist") is None
 
 
 def test_load_from_run_secrets():
@@ -59,7 +59,7 @@ def test_load_from_environment_hint():
     # Check for non existent hint
     secret_name = "idonotexist"
     secret = sec._load_from_environment_hint(secret_name)
-    assert secret == None
+    assert secret is None
 
 
 def test_load_from_environment_variable():
@@ -114,7 +114,10 @@ def test_load_from_dotenv_file():
             sec._load_from_dotenv_file("database_url", dotenv_path)
             == "postgres://user:pass@host/db"
         )
-        assert sec._load_from_dotenv_file("unicode_secret", dotenv_path) == "pa=ss # 🔐 café"
+        assert (
+            sec._load_from_dotenv_file("unicode_secret", dotenv_path)
+            == "pa=ss # 🔐 café"
+        )
         assert sec._load_from_dotenv_file("plain_secret", dotenv_path) == "hello"
         assert sec._load_from_dotenv_file("missing", dotenv_path) is None
 
@@ -151,5 +154,5 @@ def test_load():
 
                     # Test case 5
                     dotenv_mock.return_value = None
-                    assert sec.load(secret_name) == None
+                    assert sec.load(secret_name) is None
                     assert sec.load(secret_name, "fallback") == "fallback"

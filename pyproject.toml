@@ -27,7 +27,7 @@ Repository = "https://github.com/withlogicco/sec"
 
 [dependency-groups]
 dev = [
-	"pytest>=6.2.5,<7.0.0",
+	"pytest>=8.0.0",
 	"ruff>=0.6.9,<0.7.0",
 ]
 

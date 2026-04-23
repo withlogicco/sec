@@ -27,8 +27,8 @@ Repository = "https://github.com/withlogicco/sec"
 
 [dependency-groups]
 dev = [
-	"pytest>=8.0.0",
-	"ruff>=0.6.9,<0.7.0",
+	"pytest>=8.3.5",
+	"ruff>=0.15.11",
 ]
 
 [tool.ruff]
@@ -41,7 +41,7 @@ select = ["E", "F", "I"]
 quote-style = "double"
 
 [build-system]
-requires = ["hatchling>=1.25.0"]
+requires = ["hatchling>=1.27.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]

@@ -1,6 +1,6 @@
 # Sec - Tiny Python library for using secrets
 
-[![Build Status](https://travis-ci.org/sourcelair/sec.svg?branch=master)](https://travis-ci.org/sourcelair/sec)
+[![CI](https://github.com/withlogicco/sec/actions/workflows/ci.yml/badge.svg)](https://github.com/withlogicco/sec/actions/workflows/ci.yml)
 
 Sec is a tiny Python library for using secrets. Simple to its core, Sec exposes just **one function** and offers **no configurations options**.
 
@@ -14,15 +14,29 @@ All Sec does is provide a single, unique interface for accessing these informati
 
 ## Installation
 
-You can install `sec` with Pipenv:
+You can install `sec` with uv:
 
 ```
-pipenv install sec
+uv add sec
+```
+
+For local development, install the project and dev tools with:
+
+```
+uv sync --group dev
+```
+
+Quality checks use Ruff and pytest:
+
+```
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest
 ```
 
 ## Requirements
 
-Sec requires Python 3.6 (or greater) to work.
+Sec requires Python 3.8 (or greater) to work.
 
 ## API Documentation
 
@@ -33,16 +47,18 @@ The `load` method of Sec attempts to load the contents of a secret, based on a g
 1. Load the contents of `/run/secrets/{name}` (`name` is lowercased here)
 2. Load the contents of the path found in the environment variable `{name}_FILE` (`name` is uppercased here)
 3. Load the content of the environment variable `{name}` (`name` is uppercased here)
-4. Return the value of the `fallback` argument if provided, or `None`
+4. Load the content of the `.env` file in the current working directory
+5. Return the value of the `fallback` argument if provided, or `None`
 
 ## Quick Start Example
 
 First, let's create some secret files
 
 ```shell
-$ echo "mystiko" > /run/secrets/supersecret
-$ export MYSECRET_FILE=/run/secrets/supersecret
+$ echo "supersecret" > /run/secrets/mystiko
+$ export MYSECRET_FILE=/run/secrets/mystiko
 $ export ANOTHER_SECRET=hello
+$ echo "DATABASE_URL=postgresql://user:password@localhost/app" > .env
 ```
 
 Next, let's open up the Python interpreter and load these secrets in our application.
@@ -55,7 +71,13 @@ Next, let's open up the Python interpreter and load these secrets in our applica
 'supersecret'
 >>> sec.load('another_secret')
 'hello'
+>>> sec.load('database_url')
+'postgresql://user:password@localhost/app'
 ```
+
+The `.env` support is intentionally dependency-free and understands simple `.env`
+files, including blank lines, comments, `export KEY=value` entries, quoted
+values, and UTF-8 content such as emoji or accented characters.
 
 ## Use Cases
 

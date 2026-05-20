@@ -1,6 +1,6 @@
-from unittest.mock import patch
 import os
 import tempfile
+from unittest.mock import patch
 
 import sec
 
@@ -17,7 +17,7 @@ def test_load_secret_from_path():
         license = license_file.read().strip()
 
     assert sec._load_secret_from_path(license_path) == license
-    assert sec._load_secret_from_path("/i/do/not/exist") == None
+    assert sec._load_secret_from_path("/i/do/not/exist") is None
 
 
 def test_load_from_run_secrets():
@@ -54,10 +54,12 @@ def test_load_from_environment_hint():
             load_from_path_mock.assert_called_once_with(secret_file.name)
             assert secret == load_from_path_mock.return_value
 
+            del os.environ[secret_environment_hint]
+
     # Check for non existent hint
     secret_name = "idonotexist"
     secret = sec._load_from_environment_hint(secret_name)
-    assert secret == None
+    assert secret is None
 
 
 def test_load_from_environment_variable():
@@ -76,6 +78,49 @@ def test_load_from_environment_variable():
     assert sec._load_from_environment_variable("database_url") == secret
     assert sec._load_from_environment_variable("database/url") == secret
 
+    del os.environ[environment_variable_name]
+
+
+def test_parse_dotenv_line():
+    assert sec._parse_dotenv_line("") is None
+    assert sec._parse_dotenv_line("# comment") is None
+    assert sec._parse_dotenv_line("MISSING") is None
+    assert sec._parse_dotenv_line("PLAIN=hello # comment") == ("PLAIN", "hello")
+    assert sec._parse_dotenv_line("export DATABASE_URL=postgres") == (
+        "DATABASE_URL",
+        "postgres",
+    )
+    assert sec._parse_dotenv_line("DATABASE_URL='postgres'") == (
+        "DATABASE_URL",
+        "postgres",
+    )
+    assert sec._parse_dotenv_line('UNICODE_SECRET="pa=ss # 🔐 café"') == (
+        "UNICODE_SECRET",
+        "pa=ss # 🔐 café",
+    )
+
+
+def test_load_from_dotenv_file():
+    with tempfile.TemporaryDirectory() as temp_dir:
+        dotenv_path = os.path.join(temp_dir, ".env")
+
+        with open(dotenv_path, "w", encoding="utf-8-sig") as dotenv_file:
+            dotenv_file.write("# comment\n")
+            dotenv_file.write("export DATABASE_URL='postgres://user:pass@host/db'\n")
+            dotenv_file.write('UNICODE_SECRET="pa=ss # 🔐 café"\n')
+            dotenv_file.write("PLAIN_SECRET=hello # trailing comment\n")
+
+        assert (
+            sec._load_from_dotenv_file("database_url", dotenv_path)
+            == "postgres://user:pass@host/db"
+        )
+        assert (
+            sec._load_from_dotenv_file("unicode_secret", dotenv_path)
+            == "pa=ss # 🔐 café"
+        )
+        assert sec._load_from_dotenv_file("plain_secret", dotenv_path) == "hello"
+        assert sec._load_from_dotenv_file("missing", dotenv_path) is None
+
 
 def test_load():
     """
@@ -89,20 +134,25 @@ def test_load():
     with patch("sec._load_from_run_secrets") as run_secrets_mock:
         with patch("sec._load_from_environment_hint") as env_hint_mock:
             with patch("sec._load_from_environment_variable") as env_var_mock:
-                secret_name = "whoa"
+                with patch("sec._load_from_dotenv_file") as dotenv_mock:
+                    secret_name = "whoa"
 
-                # Test case 1
-                assert sec.load(secret_name) == run_secrets_mock.return_value
+                    # Test case 1
+                    assert sec.load(secret_name) == run_secrets_mock.return_value
 
-                # Test case 2
-                run_secrets_mock.return_value = None
-                assert sec.load(secret_name) == env_hint_mock.return_value
+                    # Test case 2
+                    run_secrets_mock.return_value = None
+                    assert sec.load(secret_name) == env_hint_mock.return_value
 
-                # Test case 3
-                env_hint_mock.return_value = None
-                assert sec.load(secret_name) == env_var_mock.return_value
+                    # Test case 3
+                    env_hint_mock.return_value = None
+                    assert sec.load(secret_name) == env_var_mock.return_value
 
-                # Test case 4
-                env_var_mock.return_value = None
-                assert sec.load(secret_name) == None
-                assert sec.load(secret_name, "fallback") == "fallback"
+                    # Test case 4
+                    env_var_mock.return_value = None
+                    assert sec.load(secret_name) == dotenv_mock.return_value
+
+                    # Test case 5
+                    dotenv_mock.return_value = None
+                    assert sec.load(secret_name) is None
+                    assert sec.load(secret_name, "fallback") == "fallback"
